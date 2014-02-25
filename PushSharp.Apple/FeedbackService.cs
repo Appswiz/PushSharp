@@ -13,7 +13,7 @@ namespace PushSharp.Apple
 {
 	public class FeedbackService
 	{
-		public delegate void FeedbackReceivedDelegate (string deviceToken, DateTime timestamp);
+		public delegate void FeedbackReceivedDelegate (string deviceToken, DateTime timestamp, object tag);
 
 		public event FeedbackReceivedDelegate OnFeedbackReceived;
 
@@ -21,11 +21,11 @@ namespace PushSharp.Apple
 
 		public event FeedbackExceptionDelegate OnFeedbackException;
 
-		public void RaiseFeedbackReceived(string deviceToken, DateTime timestamp)
+        public void RaiseFeedbackReceived(string deviceToken, DateTime timestamp, object tag)
 		{
 			var evt = this.OnFeedbackReceived;
 			if (evt != null)
-				evt(deviceToken, timestamp);
+				evt(deviceToken, timestamp, tag);
 		}
 
 		public void RaiseFeedbackException(Exception ex)
@@ -34,6 +34,8 @@ namespace PushSharp.Apple
 			if (evt != null)
 				evt(ex);
 		}
+
+        public object Tag { get; set; }
 
 		public void Run(ApplePushChannelSettings settings)
 		{
@@ -109,7 +111,7 @@ namespace PushSharp.Apple
 						&& timestamp > minTimestamp)
 					{
 						//Raise event
-						RaiseFeedbackReceived(deviceToken, timestamp);
+						RaiseFeedbackReceived(deviceToken, timestamp, this.Tag);
 					}
 
 				}

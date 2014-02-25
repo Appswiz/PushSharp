@@ -60,7 +60,7 @@ namespace PushSharp.Apple
 			base.ServiceSettings.MaxAutoScaleChannels = 20;
 		}
 
-		void feedbackService_OnFeedbackReceived(string deviceToken, DateTime timestamp)
+		void feedbackService_OnFeedbackReceived(string deviceToken, DateTime timestamp, object tag)
 		{
 			base.RaiseSubscriptionExpired(deviceToken, timestamp.ToUniversalTime(), null);
 		}
